@@ -1,34 +1,30 @@
 import sys
 import hmac
 from os import urandom
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
+from Crypto.Cipher import ChaCha20_Poly1305
 from hashlib import pbkdf2_hmac, sha256
 from base64 import b64encode
 from words import words
 
 def kdf(passphrase):
 	''' Derive the key from as passphrase '''
-	return pbkdf2_hmac('sha256', passphrase.encode(), b'bip encryptor', 2048, 32)
+	return pbkdf2_hmac('sha256', passphrase, b'bip encryptor', 2048, 32)
 
 def encrypt(key, mnemonic):
 	''' Encrypt the mnemonic phrase '''
-	iv = urandom(16)
-	cipher = AES.new(key, AES.MODE_CBC, iv)
-	return cipher.encrypt(pad(mnemonic.encode(), AES.block_size))
+	cipher = ChaCha20_Poly1305.new(key=key)
+	print(f'Encrypting {mnemonic}...')
+	return cipher.encrypt_and_digest(mnemonic.encode()), cipher.nonce
 
 def decrypt(key, ciphermnemonic):
 	''' Decrypt the mnemonic phrase '''
 	pass	
 
-def auth():
-	pass
-
 def encrypt_mnemonic(mnemonic, passphrase):
 	''' Encrypt the mnemonic with the AE scheme '''
 	key = kdf(passphrase)
-	ciphertext = encrypt(key, mnemonic)
-	print(f'Ciphertext: {b64encode(ciphertext)}')
+	ciphertag, nonce = encrypt(key, mnemonic)
+	print(f'Ciphertext: {b64encode(ciphertag[0])}\nTag: {b64encode(ciphertag[1])}\nNonce: {b64encode(nonce)}')
 
 def decrypt_mnemonic(ciphermnemonic, passphrase):
 	key = kdf(passphrase)
@@ -54,7 +50,7 @@ def interpret_args(args):
 	if args[0] == '-e' and args[2] == '-k' and valid_pass(args[3]):
 		if valid_mnemonic(args[1]):
 			if valid_pass(args[3]):
-				encrypt_mnemonic(args[1], args[3])
+				encrypt_mnemonic(args[1], args[3].encode())
 			else:
 				raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 		else:
@@ -63,7 +59,7 @@ def interpret_args(args):
 	elif args[0] == '-d' and args[2] == '-k':
 		if valid_mnemonic(args[1]):
 			if valid_pass(args[3]):
-				decrypt_mnemonic(args[1], args[3])
+				decrypt_mnemonic(args[1], args[3].encode())
 			else:
 				raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 		else:
