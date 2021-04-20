@@ -1,35 +1,55 @@
+#!/usr/bin/env python
 import sys
 import hmac
 from os import urandom
 from Crypto.Cipher import ChaCha20_Poly1305
 from hashlib import pbkdf2_hmac, sha256
-from base64 import b64encode
+from base64 import b64encode, b64decode
 from words import words
 
 def kdf(passphrase):
-	''' Derive the key from as passphrase '''
+	''' Derive the key from a passphrase '''
 	return pbkdf2_hmac('sha256', passphrase, b'bip encryptor', 2048, 32)
 
 def encrypt(key, mnemonic):
 	''' Encrypt the mnemonic phrase '''
+	# construct the cipher object with the key
 	cipher = ChaCha20_Poly1305.new(key=key)
-	print(f'Encrypting {mnemonic}...')
+	# return the encrypted mnemonic, Poly1305 tag, and nonce
 	return cipher.encrypt_and_digest(mnemonic.encode()), cipher.nonce
 
-def decrypt(key, ciphermnemonic):
+def decrypt(key, ciphertext, tag, nonce):
 	''' Decrypt the mnemonic phrase '''
-	pass	
+	# construct the cipher object with the key
+	cipher = ChaCha20_Poly1305.new(key=key, nonce=nonce)
+	# decrypt and verify the ciphertext
+	return cipher.decrypt_and_verify(ciphertext, tag)
 
 def encrypt_mnemonic(mnemonic, passphrase):
 	''' Encrypt the mnemonic with the AE scheme '''
+	# derive the key from the passphrase
 	key = kdf(passphrase)
+	# encrypt the mnemonic
 	ciphertag, nonce = encrypt(key, mnemonic)
-	print(f'Ciphertext: {b64encode(ciphertag[0])}\nTag: {b64encode(ciphertag[1])}\nNonce: {b64encode(nonce)}')
+	return f'{b64encode(ciphertag[0]).decode()};{b64encode(ciphertag[1]).decode()};{b64encode(nonce).decode()}'
 
 def decrypt_mnemonic(ciphermnemonic, passphrase):
+	''' Decrypt a valid, serialized <ciphertext;tag;nonce> structure '''
+	# derive the key from the passphrase
 	key = kdf(passphrase)
-	mnemonic = decrypt(key, ciphermnemonic)
-	print(f'Mnemonic: {mnemonic}')
+	# parse the ciphertext, mac, and nonce from the input ciphermnemonic
+	ciphertext, tag, nonce = parse_ciphermnemonic(ciphermnemonic)
+	return decrypt(key, ciphertext, tag, nonce)
+
+def parse_ciphermnemonic(ciphermnemonic):
+	''' Parse the serialized ciphermnemonic <ciphertext;tag;nonce>'''
+	try:
+		parsed = [b64decode(x) for x in ciphermnemonic.split(';')]
+		if (len(parsed) != 3):
+			raise ValueError('Insufficient ciphermnemonic arguments.')
+		return parsed
+	except Exception as e:
+		print(e)
 
 def help():
 	''' Print the functions command page '''
@@ -50,20 +70,19 @@ def interpret_args(args):
 	if args[0] == '-e' and args[2] == '-k' and valid_pass(args[3]):
 		if valid_mnemonic(args[1]):
 			if valid_pass(args[3]):
-				encrypt_mnemonic(args[1], args[3].encode())
+				ciphermnemonic = encrypt_mnemonic(args[1], args[3].encode())
+				print(ciphermnemonic)
 			else:
 				raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 		else:
 			raise ValueError(f'Invalid BIP mnemonics: {args[1]}')
 		# FIXME: enforce that second argument is a single string that is BIP32 compatible
 	elif args[0] == '-d' and args[2] == '-k':
-		if valid_mnemonic(args[1]):
-			if valid_pass(args[3]):
-				decrypt_mnemonic(args[1], args[3].encode())
-			else:
-				raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
+		if valid_pass(args[3]):
+			mnemonic = decrypt_mnemonic(args[1], args[3].encode())
+			print(mnemonic.decode())
 		else:
-			raise ValueError(f'Invalid BIP mnemonics: {args[1]}')
+			raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 	else:
 		raise TypeError(f'Invalid mode entered: {arguments[0]}')
 
