@@ -1,5 +1,5 @@
-### BipEncryptor
-BipEncryptor is a simple authenticated encryption scheme for securing BIP32/39 cryptocurrency recovery phrases.
+### Description
+BipEncryptor is an [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption) scheme for securing BIP32/39 cryptocurrency recovery phrases.
 
 ```bash
 $ ./bipencryptor -e "hospital blanket pottery close sheriff gate agree vintage truly antique arm radar" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
