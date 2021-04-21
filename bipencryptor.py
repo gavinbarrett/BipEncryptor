@@ -31,10 +31,10 @@ def encrypt_mnemonic(mnemonic, passphrase):
 	key = kdf(passphrase)
 	# encrypt the mnemonic
 	ciphertag, nonce = encrypt(key, mnemonic)
-	return f'{b64encode(ciphertag[0]).decode()};{b64encode(ciphertag[1]).decode()};{b64encode(nonce).decode()}'
+	return f'{b64encode(ciphertag[0]).decode()}.{b64encode(ciphertag[1]).decode()}.{b64encode(nonce).decode()}'
 
 def decrypt_mnemonic(ciphermnemonic, passphrase):
-	''' Decrypt a valid, serialized <ciphertext;tag;nonce> structure '''
+	''' Decrypt a valid, serialized <ciphertext.tag.nonce> structure '''
 	# derive the key from the passphrase
 	key = kdf(passphrase)
 	# parse the ciphertext, mac, and nonce from the input ciphermnemonic
@@ -42,9 +42,9 @@ def decrypt_mnemonic(ciphermnemonic, passphrase):
 	return decrypt(key, ciphertext, tag, nonce)
 
 def parse_ciphermnemonic(ciphermnemonic):
-	''' Parse the serialized ciphermnemonic <ciphertext;tag;nonce>'''
+	''' Parse the serialized ciphermnemonic <ciphertext.tag.nonce>'''
 	try:
-		parsed = [b64decode(x) for x in ciphermnemonic.split(';')]
+		parsed = [b64decode(x) for x in ciphermnemonic.split('.')]
 		if (len(parsed) != 3):
 			raise ValueError('Insufficient ciphermnemonic arguments.')
 		return parsed
