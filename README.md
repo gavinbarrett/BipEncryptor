@@ -5,7 +5,7 @@ BipEncryptor is an [authenticated encryption](https://en.wikipedia.org/wiki/Auth
 ### Encryption
 
 ```bash
-$ ./bipencryptor -e "hospital blanket pottery close sheriff gate agree vintage truly antique arm radar" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
+$ ./bipencryptor.py -e "hospital blanket pottery close sheriff gate agree vintage truly antique arm radar" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
 
 $ ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbsGepRhATCzjrSz1KLGedNOpmL8BKxTb;lsAGRJRnPuqEms4KHVKh/A==;sutuJRTEQan1l1co
 ```
@@ -14,7 +14,7 @@ $ ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbs
 ### Decryption
 
 ```bash
-$ ./bipencryptor -d "ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbsGepRhATCzjrSz1KLGedNOpmL8BKxTb;lsAGRJRnPuqEms4KHVKh/A==;sutuJRTEQan1l1co" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
+$ ./bipencryptor.py -d "ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbsGepRhATCzjrSz1KLGedNOpmL8BKxTb;lsAGRJRnPuqEms4KHVKh/A==;sutuJRTEQan1l1co" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
 
 $ hospital blanket pottery close sheriff gate agree vintage truly antique arm radar
 ```

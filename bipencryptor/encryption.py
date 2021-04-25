@@ -2,10 +2,15 @@ from base64 import b64encode, b64decode
 from Crypto.Cipher import ChaCha20_Poly1305
 from keystretch import kdf
 
+red = '\u001b[31m'
+green = '\u001b[32m'
+end = '\033[0m'
+
 def encrypt(key, mnemonic):
 	''' Encrypt the mnemonic phrase '''
 	# construct the cipher object with the key
 	cipher = ChaCha20_Poly1305.new(key=key)
+	print(f'{green}Encrypting mnemonic phrase.{end}')
 	# return the encrypted mnemonic, Poly1305 tag, and nonce
 	ciphertext, tag = cipher.encrypt_and_digest(mnemonic.encode())
 	return ciphertext, tag, cipher.nonce
@@ -14,6 +19,7 @@ def decrypt(key, ciphertext, tag, nonce):
 	''' Decrypt the mnemonic phrase '''
 	# construct the cipher object with the key
 	cipher = ChaCha20_Poly1305.new(key=key, nonce=nonce)
+	print(f'{red}Decrypting mnemonic phrase.{end}\n')
 	# decrypt and verify the ciphertext
 	return cipher.decrypt_and_verify(ciphertext, tag)
 

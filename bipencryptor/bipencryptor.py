@@ -4,6 +4,9 @@ from base64 import b64encode, b64decode
 from validation import valid_passphrase, valid_mnemonic, valid_ciphermnemonic
 from encryption import encrypt, decrypt, encrypt_mnemonic, decrypt_mnemonic
 
+yellow = '\u001b[33m'
+end = '\033[0m'
+
 def parse_ciphermnemonic(ciphermnemonic):
 	''' Parse the serialized ciphermnemonic <ciphertext.tag.nonce>'''
 	try:
@@ -20,7 +23,7 @@ def interpret_args(args):
 		if valid_mnemonic(args[1]):
 			if valid_passphrase(args[3]):
 				ciphermnemonic = encrypt_mnemonic(args[1], args[3].encode())
-				print(ciphermnemonic)
+				print(f'Your ciphermnemonic is:\n{yellow}{ciphermnemonic}{end}')
 			else:
 				raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 		else:
@@ -29,7 +32,7 @@ def interpret_args(args):
 	elif args[0] == '-d' and args[2] == '-k':
 		if valid_ciphermnemonic(args[1]) and valid_passphrase(args[3]):
 			mnemonic = decrypt_mnemonic(args[1], args[3].encode())
-			print(mnemonic.decode())
+			print(f'Your mnemonic is:\n\t{yellow}{mnemonic.decode()}{end}')
 		else:
 			raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 	else:
