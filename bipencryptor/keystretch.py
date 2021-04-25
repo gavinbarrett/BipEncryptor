@@ -10,5 +10,5 @@ def kdf(passphrase):
 	''' Derive the key from a passphrase '''
 	print(f'{white}Stretching key...{end}')
 	# compute 50 of the available memory
-	mem = floor((virtual_memory().free * 0.66)/1000)
-	return hash_password_raw(time_cost=8, memory_cost=mem, parallelism=cpu_count(), hash_len=32, password=passphrase, salt=b"k3y der1vati0n", type=low_level.Type.ID)
+	#mem = floor((virtual_memory().free * 0.66)/1000)
+	return hash_password_raw(time_cost=8, memory_cost=65535, parallelism=cpu_count(), hash_len=32, password=passphrase, salt=b"k3y der1vati0n", type=low_level.Type.ID)

@@ -32,7 +32,7 @@ def interpret_args(args):
 	elif args[0] == '-d' and args[2] == '-k':
 		if valid_ciphermnemonic(args[1]) and valid_passphrase(args[3]):
 			mnemonic = decrypt_mnemonic(args[1], args[3].encode())
-			print(f'Your mnemonic is:\n\t{yellow}{mnemonic.decode()}{end}')
+			print(f'Your mnemonic is:\n{yellow}{mnemonic.decode()}{end}')
 		else:
 			raise ValueError(f'Invalid passphrase: {args[3]}\nPassphrase must be between 10 and 64 characters [a-zA-Z0-9!@#$%&+=?]')
 	else:
