@@ -35,7 +35,6 @@ def decrypt_mnemonic(ciphermnemonic, passphrase):
 	''' Decrypt a valid, serialized <ciphertext.tag.nonce> structure '''
 	# derive the key from the passphrase
 	key = kdf(passphrase)
-	print(f'Encryption key: {key.hex()}')
 	# parse the ciphertext, mac, and nonce from the input ciphermnemonic
 	ciphertext, tag, nonce = parse_ciphermnemonic(ciphermnemonic)
 	return decrypt(key, ciphertext, tag, nonce)
