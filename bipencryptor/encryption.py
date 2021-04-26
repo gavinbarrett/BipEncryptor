@@ -1,6 +1,6 @@
 from base64 import b64encode, b64decode
 from Crypto.Cipher import ChaCha20_Poly1305
-from keystretch import kdf
+from keystretch import kdf, kdf_decrypt
 
 red = '\u001b[31m'
 green = '\u001b[32m'
@@ -26,24 +26,27 @@ def decrypt(key, ciphertext, tag, nonce):
 def encrypt_mnemonic(mnemonic, passphrase):
 	''' Encrypt the mnemonic with the AE scheme '''
 	# derive the key from the passphrase
-	key = kdf(passphrase)
+	key, params = kdf(passphrase)
 	# encrypt the mnemonic
 	ciphertext, tag, nonce = encrypt(key, mnemonic)
-	return f'{b64encode(ciphertext).decode()}.{b64encode(tag).decode()}.{b64encode(nonce).decode()}'
+	return f'{b64encode(ciphertext).decode()}.{b64encode(tag).decode()}.{b64encode(nonce).decode()}.{b64encode(params.encode()).decode()}'
 
 def decrypt_mnemonic(ciphermnemonic, passphrase):
 	''' Decrypt a valid, serialized <ciphertext.tag.nonce> structure '''
-	# derive the key from the passphrase
-	key = kdf(passphrase)
 	# parse the ciphertext, mac, and nonce from the input ciphermnemonic
-	ciphertext, tag, nonce = parse_ciphermnemonic(ciphermnemonic)
+	ciphertext, tag, nonce, time, mem, cores = parse_ciphermnemonic(ciphermnemonic)
+	# derive the key from the passphrase
+	key = kdf_decrypt(passphrase, time, mem, cores)
 	return decrypt(key, ciphertext, tag, nonce)
 
 def parse_ciphermnemonic(ciphermnemonic):
 	''' Parse the serialized ciphermnemonic <ciphertext.tag.nonce>'''
 	try:
 		parsed = [b64decode(x) for x in ciphermnemonic.split('.')]
-		if (len(parsed) != 3):
+		# split key parameters
+		key_params = parsed.pop().decode().split(";")
+		parsed += key_params
+		if (len(parsed) != 6):
 			raise ValueError('Insufficient ciphermnemonic arguments.')
 		return parsed
 	except Exception as e:
