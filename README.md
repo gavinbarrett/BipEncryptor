@@ -17,9 +17,9 @@ Before being encoded with base64, the last value looks something like this:
 ```
 
 And refers to the following argon2 parameters:
-1. The time cost argument
-2. The memory argument in bytes
-3. The number of virtual CPU cores of the client computer
+1. The time cost
+2. The memory usage in bytes
+3. The number of virtual CPU cores used
 
 ### Cryptographic Primitives
 This project is written in Python and uses the ```pycryptodome``` implementation of ChaCha20-Poly1305 for encryption and authentication. It uses the ```argon2-cffi``` package
@@ -44,4 +44,4 @@ $ hospital blanket pottery close sheriff gate agree vintage truly antique arm ra
 
 
 ### Disclaimer
-Do not send funds to any cryptocurrency address associated with the aforementioned mnemonic phrase, or they will be taken.
+Do not send funds to any cryptocurrency address associated with the aforementioned mnemonic phrase; they will be confiscated.
