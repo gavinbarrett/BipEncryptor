@@ -8,12 +8,11 @@ end = '\033[0m'
 
 def kdf(passphrase):
 	''' Derive the key from a passphrase '''
-	print(f'{white}Stretching key...{end}')
-	# compute 50 of the available memory
-	mem = floor((virtual_memory().free * 0.66)/1000)
+	time = 16
+	mem = floor((virtual_memory().free * 0.75)/1000) # use 75% of available memory
 	cores = cpu_count()
-	key_params = f'8;{mem};{cores}'
-	return hash_password_raw(time_cost=8, memory_cost=mem, parallelism=cores, hash_len=32, password=passphrase, salt=b"k3y der1vati0n", type=low_level.Type.ID), key_params
+	print(f'{white}Stretching key...{end}')
+	return hash_password_raw(time_cost=time, memory_cost=mem, parallelism=cores, hash_len=32, password=passphrase, salt=b"k3y der1vati0n", type=low_level.Type.ID), f'{time};{mem};{cores}'
 
 def kdf_decrypt(passphrase, time, mem, cores):
 	print(f'{white}Stretching key...{end}')

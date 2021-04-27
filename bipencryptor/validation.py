@@ -1,7 +1,8 @@
+from re import match
 from words import words
 
 def valid_passphrase(passphrase):
-	''' Enforce a passphrase policy (20 character alphanumeric + special characters) '''
+	# FIXME: Enforce a passphrase policy (20 character alphanumeric + special characters)
 	return True
 
 def valid_mnemonic(mnemonic):
@@ -12,5 +13,7 @@ def valid_mnemonic(mnemonic):
 	return all([phrase in words for phrase in phrase_words]) and len(phrase_words) in [12, 15, 18, 21, 24]
 
 def valid_ciphermnemonic(ciphermnemonic):
-	''' Return true if the ciphermnemonic is properly structured - <b64ciphertext.b64tag.b64nonce> '''
-	return True
+	''' Return true if the ciphermnemonic is properly structured - <b64ciphertext.b64tag.b64nonce.b64keyparams> '''
+	return match(r"([a-zA-Z0-9\+/=]+\.){3}[a-zA-Z0-9\+/=]+", ciphermnemonic)
+	#	#return True
+	#return False
