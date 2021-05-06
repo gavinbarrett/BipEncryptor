@@ -30,14 +30,13 @@ This project is written in Python and uses the ```pycryptodome``` implementation
 ```bash
 $ ./bipencryptor.py -e "hospital blanket pottery close sheriff gate agree vintage truly antique arm radar" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
 
-$ ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbsGepRhATCzjrSz1KLGedNOpmL8BKxTb;lsAGRJRnPuqEms4KHVKh/A==;sutuJRTEQan1l1co
-```
+$ qeSj8zF5vv1PfFYf71rD3VynYhCdvDZSyo3n5jOQmh655aNDGkkdq4dLHQfk8HzVHAahloHBxqNHpHa2ShynUWoXtsg3MO515dBeTCxUxhkm.8sg6KL1nIljKkeYUx+dIyA==.7fTMJkoJrUJ2ION9.MTY7MjQyNzM2NTs4```
 
 
 ### Decryption
 
 ```bash
-$ ./bipencryptor.py -d "ZwxKFJ7N/Be4ssWBWs0HAd6cvqOKEn1mDKN1+Gnh+pIskTE6rw3YXK1GIju88RhqtZfIGi/Nr5bBbsGepRhATCzjrSz1KLGedNOpmL8BKxTb;lsAGRJRnPuqEms4KHVKh/A==;sutuJRTEQan1l1co" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
+$ ./bipencryptor.py -d "qeSj8zF5vv1PfFYf71rD3VynYhCdvDZSyo3n5jOQmh655aNDGkkdq4dLHQfk8HzVHAahloHBxqNHpHa2ShynUWoXtsg3MO515dBeTCxUxhkm.8sg6KL1nIljKkeYUx+dIyA==.7fTMJkoJrUJ2ION9.MTY7MjQyNzM2NTs4" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
 
 $ hospital blanket pottery close sheriff gate agree vintage truly antique arm radar
 ```
