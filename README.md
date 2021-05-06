@@ -30,7 +30,8 @@ This project is written in Python and uses the ```pycryptodome``` implementation
 ```bash
 $ ./bipencryptor.py -e "hospital blanket pottery close sheriff gate agree vintage truly antique arm radar" -k "th15is@secr3tp@ssphr@senob0dykn0wsbutm3"
 
-$ qeSj8zF5vv1PfFYf71rD3VynYhCdvDZSyo3n5jOQmh655aNDGkkdq4dLHQfk8HzVHAahloHBxqNHpHa2ShynUWoXtsg3MO515dBeTCxUxhkm.8sg6KL1nIljKkeYUx+dIyA==.7fTMJkoJrUJ2ION9.MTY7MjQyNzM2NTs4```
+$ qeSj8zF5vv1PfFYf71rD3VynYhCdvDZSyo3n5jOQmh655aNDGkkdq4dLHQfk8HzVHAahloHBxqNHpHa2ShynUWoXtsg3MO515dBeTCxUxhkm.8sg6KL1nIljKkeYUx+dIyA==.7fTMJkoJrUJ2ION9.MTY7MjQyNzM2NTs4
+```
 
 
 ### Decryption
