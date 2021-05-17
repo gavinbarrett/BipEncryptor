@@ -21,6 +21,8 @@ And refers to the following argon2 parameters:
 2. The memory usage in bytes
 3. The number of virtual CPU cores used
 
+Currently, BipEncryptor uses a time cost of 16, 75% of available memory, and every virtual core of the CPU. These parameters are __necessary for deriving the decryption key__.
+
 <img src="images/encryptorscheme.png">
 
 ### Cryptographic Primitives
